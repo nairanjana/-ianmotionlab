@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAN MOTION LAB</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #e5e5e5;
+            --header-bg: #ffffff;
+            --sub-text: #444444;
+            --accent-blue: #0284c7;
+            --accent-green: #16a34a;
+            --accent-orange: #ea580c;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f3f4f6;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --border-color: #333333;
+            --header-bg: #18181b;
+            --sub-text: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
+        .utility-bar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 6px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        .user-status-display {
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .utility-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .utility-links a, .utility-links button {
+            color: var(--sub-text);
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .utility-links a:hover, .utility-links button:hover {
+            color: var(--text-color);
+        }
+
+        .theme-switcher {
+            border: 1px solid var(--border-color) !important;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .main-header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            width: 100%;
+            padding: 0 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 55px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            text-decoration: none;
+            color: var(--text-color);
+            letter-spacing: -1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item > a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover > a {
+            color: var(--accent-blue);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--header-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 0 0 8px 8px;
+            padding: 10px 0;
+            min-width: 220px;
+            display: none;
+            list-style: none;
+            z-index: 100;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 10px 18px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--card-bg);
+            color: var(--accent-blue);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 12px;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-color);
+            font-size: 12px;
+            width: 120px;
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--sub-text);
+            font-size: 12px;
+        }
+
+        .reset-view-container {
+            width: 100%;
+            padding: 8px 5% 0 5%;
+            text-align: right;
+        }
+
+        .btn-reset {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-reset:hover {
+            background-color: var(--border-color);
+        }
+
+        .section {
+            width: 100%;
+            min-height: 100vh;
+            padding: 25px 5% 60px 5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            scroll-margin-top: 60px; 
+        }
+
+        .section.hidden {
+            display: none !important;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 50px;
+            margin-bottom: 8px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 700;
+            opacity: 0.85;
+        }
+
+        .section-banner, .inter-section-banner {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 18px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            min-height: 470px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .card.hidden {
+            display: none !important;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .card-desc { font-size: 13px; color: var(--sub-text); margin-bottom: 12px; line-height: 1.5; font-weight: 500; }
+        .card-price { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+
+        .btn-box {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            background-color: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .detailed-content-view {
+            display: none;
+            margin-top: 20px;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+        }
+        .detailed-content-view.active { display: block; }
+        .detailed-content-view h3 { font-size: 24px; margin-bottom: 10px; font-weight: 800; }
+        .detailed-content-view p { font-size: 15px; color: var(--sub-text); margin-bottom: 15px; line-height: 1.7; }
+
+        .detail-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .detail-img-box {
+            height: 180px;
+            background-color: var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sub-text);
+            font-size: 12px;
+        }
+
+        /* 풀페이지 뷰 (게시판, 고객센터, 로그인, 회원가입 등 전체 화면 전환용) */
+        .page-view {
+            min-height: 80vh;
+            padding: 40px 5%;
+            width: 100%;
+            display: none;
+            scroll-margin-top: 60px;
+        }
+        .page-view.active { display: block; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--text-color);
+            padding-bottom: 15px;
+        }
+        .page-header h2 { font-size: 26px; font-weight: 800; }
+
+        .btn-action {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .board-table th, .board-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .board-table th { background-color: var(--card-bg); font-weight: 700; }
+
+        /* 입력 폼 전용 전체 화면 컨테이너 스타일 */
+        .form-container-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .form-container-box h3 { margin-bottom: 20px; font-size: 22px; font-weight: 800; }
+        .form-container-box input, .form-container-box textarea, .form-container-box select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-container-box textarea { height: 180px; resize: vertical; }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        /* 고객센터 레이아웃 전용 */
+        .customer-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .info-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+        }
+        .info-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+        .info-card p { font-size: 15px; margin-bottom: 12px; line-height: 1.6; }
+
+        footer {
+            width: 100%;
+            padding: 30px 5%;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-color);
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+        footer p { margin: 5px 0; }
+
+        @media (max-width: 768px) {
+            .section-header h2 { font-size: 32px; }
+            .utility-bar { font-size: 10px; padding: 6px 3%; }
+            .nav-container { padding: 0 4px; }
+            .logo { font-size: 18px; }
+            .nav-menu { gap: 12px; }
+            .nav-item > a { font-size: 12px; padding: 0 2px; }
+            .search-box { display: none; }
+            .customer-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- 최상단 유틸리티 바 -->
+    <div class="utility-bar">
+        <div class="user-status-display" id="user-status-text">방문객님 환영합니다!</div>
+        <div class="utility-links">
+            <button onclick="openPage('customer-center-page')">고객센터</button>
+            <button onclick="openPage('signup-page')" id="btn-signup-link">가입하기</button>
+            <button onclick="openPage('login-page')" id="btn-login-link">로그인</button>
+            <button onclick="handleLogout()" id="btn-logout-link" style="display:none;">로그아웃</button>
+            <button onclick="openAdminDashboard()" id="btn-admin-link" style="display:none; color:var(--accent-orange); font-weight:bold;">관리자 페이지</button>
+            <button class="theme-switcher" onclick="toggleTheme()">다크/라이트 모드</button>
+        </div>
+    </div>
+
+    <!-- 메인 네비게이션 헤더 -->
+    <header class="main-header">
+        <div class="nav-container">
+            <a href="javascript:showMainView()" class="logo">IAN MOTION LAB</a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="javascript:filterSection('ian-motion')">이안모션랩 ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:filterCard('ian-motion', 'card-ian-1')">영상 촬영 및 편집</a></li>
+                        <li><a href="javascript:filterCard('ian-motion', 'card-ian-2')">광고 기획 및 스토리텔링</a></li>
+                        <li><a href="javascript:filterCard('ian-motion', 'card-ian-3')">AI 영상 제작</a></li>
+                        <li><a href="javascript:filterCard('ian-motion', 'card-ian-4')">드론 1종 항공 촬영</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:filterSection('tea-section')">달과 차향기 ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:filterCard('tea-section', 'card-tea-1')">아홉 번 덖음 명품 수제 녹차</a></li>
+                        <li><a href="javascript:filterCard('tea-section', 'card-tea-2')">전통 제다 수제 발효차</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:filterSection('worker-team')">노가다꾼 ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:filterCard('worker-team', 'card-work-1')">일반 현장 작업</a></li>
+                        <li><a href="javascript:filterCard('worker-team', 'card-work-2')">고위험 현장 작업</a></li>
+                        <li><a href="javascript:filterCard('worker-team', 'card-work-3')">고난도 전문 작업</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:openPage('notice-board')">공지사항</a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:openPage('qna-board')">문의게시판</a>
+                </li>
+            </ul>
+
+            <div class="search-box">
+                <input type="text" placeholder="검색어 입력...">
+                <button>🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="reset-view-container" id="reset-container">
+        <button class="btn-reset" onclick="showMainView()">전체 목록 보기</button>
+    </div>
+
+<!-- 메인 콘텐츠 영역 -->
+    <div id="main-content-wrap">
+        
+        <section class="section" id="ian-motion">
+            <!-- 🛠️ 이안모션랩: 글씨 크기 및 상하 위치를 자유롭게 조절할 수 있는 변수(인라인 스타일) 적용 -->
+            <div class="section-header" style="position: relative; top: -12px; margin-bottom: 25px;">
+                <h2 style="color: var(--accent-blue); font-size: 60px; transform: translateY(-50px);">이안모션랩</h2>
+                <p style="font-size: 16px; transform: translateY(-50px);">고품격 영상 촬영·편집, 감각적인 광고 기획, AI 시네마틱 콘텐츠 및 드론 1종 항공 촬영 전문</p>
+            </div>
+            
+       <!-- 이안모션랩 배너 (위치 및 크기 고정 / 필요시 top/height 조절 가능) -->
+            <div class="section-banner" style="height: 150px; position: relative; top: -40px; margin-bottom: -10px;">
+                <img src="images/nogada0.jpg" alt="이안모션랩 배너" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+            </div>
+
+            <div class="card-grid">
+                <div class="card" id="card-ian-1" onclick="filterCard('ian-motion', 'card-ian-1'); showDetailContent('detail-ian-1');">
+                    <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/ian0.jpg" alt="영상 촬영 및 편집" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">영상 촬영 및 편집</div>
+                            <div class="card-desc">고화질 영상 소스 확보부터 색보정, 사운드 디자인까지 디테일한 전문 편집 작업</div>
+                            <div class="card-price" style="color:var(--accent-blue);">견적 문의</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('ian-motion', 'card-ian-1'); showDetailContent('detail-ian-1');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="card-ian-2" onclick="filterCard('ian-motion', 'card-ian-2'); showDetailContent('detail-ian-2');">
+    <div style="width: 100%; height: 220px; overflow: hidden;">
+        <img src="images/ian2.jpg" alt="광고 기획 및 스토리텔링" style="width: 100%; height: 100%; object-fit: cover; object-position: 80% 20%; display: block;">
+    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">광고 기획 및 스토리텔링</div>
+                            <div class="card-desc">주목도를 극대화하는 차별화된 광고 콘셉트 기획 및 몰입감 넘치는 스토리텔링</div>
+                            <div class="card-price" style="color:var(--accent-blue);">견적 문의</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('ian-motion', 'card-ian-2'); showDetailContent('detail-ian-2');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="card" id="card-ian-3" onclick="filterCard('ian-motion', 'card-ian-3'); showDetailContent('detail-ian-3');">
+    <div style="width: 100%; height: 220px; overflow: hidden;">
+        <img src="images/ian1.png" alt="AI 영상 제작" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block;">
+    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">AI 영상 제작</div>
+                            <div class="card-desc">최신 인공지능 툴을 활용한 시네마틱 영상 및 트렌디한 AI 콘텐츠 제작</div>
+                            <div class="card-price" style="color:var(--accent-blue);">협의 / 맞춤</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('ian-motion', 'card-ian-3'); showDetailContent('detail-ian-3');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="card" id="card-ian-4" onclick="filterCard('ian-motion', 'card-ian-4'); showDetailContent('detail-ian-4');">
+    <div style="width: 100%; height: 220px; overflow: hidden;">
+        <img src="images/ian3.jpg" alt="드론 1종 항공 촬영" style="width: 100%; height: 100%; object-fit: cover; object-position: 30% 70%; display: block;">
+    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">드론 1종 항공 촬영</div>
+                            <div class="card-desc">국가자격증 보유 전문 조종사의 탁 트인 시야의 4K 드론 항공 영상 및 현장 스케치 촬영</div>
+                            <div class="card-price" style="color:var(--accent-blue);">견적 문의</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('ian-motion', 'card-ian-4'); showDetailContent('detail-ian-4');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detailed-content-view" id="detail-ian-1">
+                <h3>🎥 영상 촬영 및 편집 전문 프로세스</h3>
+                <p>이안모션랩은 최고 사양의 촬영 장비와 전문 색보정(DI), 사운드 디자인 기술을 바탕으로 클라이언트가 원하는 시각적 메시지를 완벽하게 구현해냅니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">전문 촬영 현장 사진 1</div><div class="detail-img-box">편집 작업 화면 사진 2</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-ian-2">
+                <h3>📈 광고 기획 및 스토리텔링 전략</h3>
+                <p>소비자의 이목을 단숨에 사로잡는 강력한 후킹 포인트와 브랜드 스토리텔링을 결합하여 마케팅 효과를 극대화합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">기획 회의 사진 1</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-ian-3">
+                <h3>🤖 AI 영상 제작 솔루션</h3>
+                <p>최신 AI 영상 생성 모델과 미디어 테크놀로지를 융합하여 상상 속 비주얼을 현실로 구현합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">AI 작업 화면 1</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-ian-4">
+                <h3>🚁 드론 1종 국가자격 보유 항공 촬영</h3>
+                <p>국토교통부 드론 1종 자격증을 보유한 전문 조종사가 직접 안전하고 규정에 맞는 합법적 항공 촬영을 진행합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">드론 비행 현장 1</div></div>
+            </div>
+
+            <div class="inter-section-banner" style="height: 300px; margin-top: 40px;">
+                <img src="images/tea1.jpg" alt="이안모션랩 X 달과 차향기 스토리 배너" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+            </div>
+        </section>
+
+        <section class="section" id="tea-section">
+            <!-- 🛠️ 달과 차향기: 제목(h2)과 설명글(p)의 폰트 크기 및 상하 위치(transform)를 독립적으로 조절 가능 -->
+            <div class="section-header" style="position: relative; top: -12px; margin-bottom: 25px;">
+                <h2 style="color: var(--accent-green); font-size: 60px; transform: translateY(-70px);">달과 차향기</h2>
+                <p style="font-size: 16px; transform: translateY(-70px);">전통 제다법을 고수하는 수제 명품 녹차와 깊은 풍미의 발효차 전문 브랜드</p>
+            </div>
+            
+           <!-- 달과 차향기 배너 (위치 및 크기 고정 / 필요시 top/height 조절 가능) -->
+            <div class="section-banner" style="height: 150px; position: relative; top: -70px; margin-bottom: -30px;">
+                <img src="images/tea1.jpg" alt="달과 차향기 배너" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+            </div>
+            
+            <div class="card-grid">
+                <div class="card" id="card-tea-1" onclick="filterCard('tea-section', 'card-tea-1'); showDetailContent('detail-tea-1');">
+                   <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/tea2.jpg" alt="수제 녹차" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                   </div>
+                   <div class="card-body">
+                        <div>
+                            <div class="card-title">아홉 번 덖음 명품 수제 녹차</div>
+                            <div class="card-desc">구증구포 전통 방식으로 덖어내어 깊은 풍미와 부드러움을 자랑하는 수제 녹차</div>
+                            <div class="card-price" style="color:var(--accent-green);">가격 문의</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('tea-section', 'card-tea-1'); showDetailContent('detail-tea-1');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="card-tea-2" onclick="filterCard('tea-section', 'card-tea-2'); showDetailContent('detail-tea-2');">
+                    <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/tea5.jpg" alt="전통 제다 수제 발효차" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">전통 제다 수제 발효차</div>
+                            <div class="card-desc">오랜 숙성과 정성으로 빚어낸 은은한 향과 깊은 맛의 프리미엄 발효차</div>
+                            <div class="card-price" style="color:var(--accent-green);">가격 문의</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@IanMotionLab" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('tea-section', 'card-tea-2'); showDetailContent('detail-tea-2');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detailed-content-view" id="detail-tea-1">
+                <h3>🍵 아홉 번 덖음 명품 수제 녹차 스토리</h3>
+                <p>이른 봄 어린 찻잎만을 엄선하여 가마솥에서 아홉 번 덖고 아홉 번 말리는 구증구포 전통 방식으로 제다합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">찻잎 덖음 과정 1</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-tea-2">
+                <h3>🌿 전통 제다 수제 발효차</h3>
+                <p>전통 발효 공법을 거쳐 깊고 그윽한 바디감과 부드러운 목 넘김을 선사하는 프리미엄 발효차입니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">발효 숙성실 1</div></div>
+            </div>
+
+            <div class="inter-section-banner" style="height: 300px; margin-top: 40px;">
+                <img src="images/nogada0.jpg" alt="달과 차향기 X 노가다꾼 스토리 배너" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+            </div>
+        </section>
+
+        <section class="section" id="worker-team">
+            <!-- 🛠️ 노가다꾼: '노가다꾼' 글씨(h2)와 설명글(p) 각각의 폰트 크기(font-size) 및 위아래 위치(transform: translateY)를 직접 조절할 수 있도록 설정 -->
+            <div class="section-header" style="position: relative; top: -12px; margin-bottom: 25px;">
+                <h2 style="color: var(--accent-orange); font-size: 60px; transform: translateY(-70px);">노가다꾼</h2>
+                <p style="font-size: 16px; transform: translateY(-70px);">NO 인력소 수수료! 1대1 현장 직거래 아파트 및 건설 현장 안전망·안전 설치 전문 작업 팀</p>
+            </div>
+            
+          <!-- 노가다꾼 배너 (위치 및 크기 고정 / 필요시 top/height 조절 가능) -->
+            <div class="section-banner" style="height: 150px; position: relative; top: -70px; margin-bottom: -30px;">
+                <img src="images/nogada2.png" alt="노가다꾼 배너" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+            </div>
+
+            <div class="card-grid">
+                <div class="card" id="card-work-1" onclick="filterCard('worker-team', 'card-work-1'); showDetailContent('detail-work-1');">
+                    <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/nogada5.jpg" alt="일반 현장 작업" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">일반 현장 작업</div>
+                            <div class="card-desc">아파트 및 일반 건설 현장 안전망 기초 설치 및 점검 작업</div>
+                            <div class="card-price" style="color:var(--accent-orange);">일당 18만원 ~</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@NogadaKkun" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('worker-team', 'card-work-1'); showDetailContent('detail-work-1');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="card-work-2" onclick="filterCard('worker-team', 'card-work-2'); showDetailContent('detail-work-2');">
+                    <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/nogada3.jpg" alt="고위험 현장 작업" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">고위험 현장 작업</div>
+                            <div class="card-desc">아파트 건설 현장 고소 작업 및 위험 구역 안전망 신속 설치</div>
+                            <div class="card-price" style="color:var(--accent-orange);">일당 22만원 ~</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@NogadaKkun" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('worker-team', 'card-work-2'); showDetailContent('detail-work-2');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="card-work-3" onclick="filterCard('worker-team', 'card-work-3'); showDetailContent('detail-work-3');">
+                    <div style="width: 100%; height: 220px; overflow: hidden;">
+                        <img src="images/nogada1.png" alt="고난도 전문 작업" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="card-title">고난도 전문 작업</div>
+                            <div class="card-desc">특수 구조 현장 및 고난도 기술이 요구되는 전문 안전망 설치 시공</div>
+                            <div class="card-price" style="color:var(--accent-orange);">일당 29만원 ~</div>
+                        </div>
+                        <div class="btn-box" onclick="event.stopPropagation()">
+                            <a href="https://www.youtube.com/@NogadaKkun" target="_blank" class="btn">유튜브 채널</a>
+                            <a href="javascript:filterCard('worker-team', 'card-work-3'); showDetailContent('detail-work-3');" class="btn">상세 설명 보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detailed-content-view" id="detail-work-1">
+                <h3>👷 일반 현장 작업 안내</h3>
+                <p>중간 수수료(인력소)를 거치지 않고 현장과 직접 연결되어 투명하고 합리적인 비용으로 진행되는 아파트 안전망 설치 현장 작업입니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">현장 작업 사진 1</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-work-2">
+                <h3>⚠️ 고위험 현장 전문 안전 작업</h3>
+                <p>안전 수칙을 최우선으로 준수하며, 고소 작업 및 위험 구역 내에서 요구되는 전문 안전망 설치를 수행합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">고소 작업 사진 1</div></div>
+            </div>
+            <div class="detailed-content-view" id="detail-work-3">
+                <h3>🛠️ 고난도 전문 특수 작업</h3>
+                <p>일반 인력으로는 해결하기 힘든 특수 구조물 안전망 설치 및 고난도 기술 시공을 도맡아 처리합니다.</p>
+                <div class="detail-gallery"><div class="detail-img-box">특수 작업 사진 1</div></div>
+            </div>
+        </section>
+    </div></section>
+    </div>    <!-- ================= 1. 공지사항 게시판 페이지 ================= -->
+    <div class="page-view" id="notice-board">
+        <div class="page-header">
+            <h2>📢 공지사항</h2>
+            <div>
+                <button class="btn-action" id="btn-go-notice-write" onclick="openPage('notice-write-page')" style="display:none; margin-right:10px;">공지 작성하기</button>
+                <button class="btn-reset" onclick="showMainView()">메인으로</button>
+            </div>
+        </div>
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">번호</th>
+                    <th style="width: 55%;">제목</th>
+                    <th style="width: 15%;">작성자</th>
+                    <th style="width: 10%;">날짜</th>
+                    <th style="width: 10%;">관리</th>
+                </tr>
+            </thead>
+            <tbody id="notice-list"></tbody>
+        </table>
+    </div>
+
+    <!-- 공지 작성 전체 화면 페이지 -->
+    <div class="page-view" id="notice-write-page">
+        <div class="page-header">
+            <h2>📢 공지사항 작성</h2>
+            <button class="btn-reset" onclick="openPage('notice-board')">목록으로</button>
+        </div>
+        <div class="form-container-box" style="max-width:100%;">
+            <input type="text" id="notice-title-input" placeholder="공지 제목을 입력하세요">
+            <textarea id="notice-content-input" placeholder="공지 내용을 입력하세요"></textarea>
+            <div style="text-align: right;">
+                <button class="btn-action" onclick="addNoticePost()">공지 등록 완료</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. 문의게시판 페이지 ================= -->
+    <div class="page-view" id="qna-board">
+        <div class="page-header">
+            <h2>❓ 문의게시판 (1:1 / 견적 문의)</h2>
+            <div>
+                <button class="btn-action" onclick="openPage('qna-write-page')" style="margin-right:10px;">문의하기</button>
+                <button class="btn-reset" onclick="showMainView()">메인으로</button>
+            </div>
+        </div>
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">번호</th>
+                    <th style="width: 55%;">제목</th>
+                    <th style="width: 15%;">작성자</th>
+                    <th style="width: 10%;">날짜</th>
+                    <th style="width: 10%;">관리</th>
+                </tr>
+            </thead>
+            <tbody id="qna-list"></tbody>
+        </table>
+    </div>
+
+    <!-- 문의 작성 전체 화면 페이지 -->
+    <div class="page-view" id="qna-write-page">
+        <div class="page-header">
+            <h2>❓ 1:1 문의 작성</h2>
+            <button class="btn-reset" onclick="openPage('qna-board')">목록으로</button>
+        </div>
+        <div class="form-container-box" style="max-width:100%;">
+            <input type="text" id="qna-title-input" placeholder="문의 제목을 입력하세요">
+            <textarea id="qna-content-input" placeholder="문의 내용을 상세히 적어주세요"></textarea>
+            <input type="password" id="qna-pw-input" placeholder="비밀번호 설정 (숫자/문자 4자리 이상 권장)">
+            <label class="checkbox-label">
+                <input type="checkbox" id="qna-secret-check"> 🔒 비밀글로 설정하기 (비밀번호를 입력해야 열람 가능합니다)
+            </label>
+            <button class="btn-action" style="width:100%; padding:14px;" onclick="addQnaPost()">문의 등록하기</button>
+        </div>
+    </div>
+
+    <!-- ================= 3. 고객센터 및 1:1 직접 문의 페이지 ================= -->
+    <div class="page-view" id="customer-center-page">
+        <div class="page-header">
+            <h2>고객센터 및 1:1 직접 문의</h2>
+            <button class="btn-reset" onclick="showMainView()">메인으로</button>
+        </div>
+        <div class="customer-layout">
+            <div class="info-card">
+                <h3>사업자 정보</h3>
+                <p><strong>상호명:</strong> 이안모션랩</p>
+                <p><strong>대표자:</strong> 이안석</p>
+                <p><strong>사업자등록번호:</strong> 765-14-01710</p>
+                <p><strong>소재지:</strong> 경기도 부천시 계남로 123 (여수 현장 병행 운영)</p>
+                <p><strong>대표 연락처:</strong> 010-0000-0000</p>
+            </div>
+            <div class="info-card" style="background-color: var(--bg-color);">
+                <h3>1:1 직접 문의 남기기</h3>
+                <input type="text" id="direct-qna-title" placeholder="문의 제목" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); border-radius:6px;">
+                <textarea id="direct-qna-content" placeholder="문의 내용을 입력하세요" style="width:100%; height:120px; padding:10px; margin-bottom:10px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); border-radius:6px; resize:vertical;"></textarea>
+                <input type="password" id="direct-qna-pw" placeholder="비밀번호 설정" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); border-radius:6px;">
+                <label class="checkbox-label"><input type="checkbox" id="direct-qna-secret" checked> 🔒 비밀글 설정</label>
+                <button class="btn-action" style="width:100%;" onclick="submitDirectQna()">문의 접수하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4. 회원가입 페이지 (비밀번호 찾기 힌트 포함) ================= -->
+    <div class="page-view" id="signup-page">
+        <div class="page-header">
+            <h2>회원가입</h2>
+            <button class="btn-reset" onclick="showMainView()">메인으로</button>
+        </div>
+        <div class="form-container-box">
+            <h3>새 계정 만들기</h3>
+            <input type="text" id="reg-id" placeholder="아이디 (이메일 주소 등)">
+            <input type="password" id="reg-pw" placeholder="비밀번호">
+            <input type="text" id="reg-name" placeholder="이름">
+            <input type="text" id="reg-phone" placeholder="연락처 (예: 010-1234-5678)">
+            <input type="text" id="reg-address" placeholder="도로명 주소 입력">
+            <input type="text" id="reg-hint" placeholder="비밀번호 찾기 질문 (예: 나의 보물 1호는?)">
+            <input type="text" id="reg-answer" placeholder="비밀번호 찾기 답변 (예: 카메라)">
+            <button class="btn-action" style="width:100%; padding:14px;" onclick="handleSignup()">가입 완료하기</button>
+        </div>
+    </div>
+
+    <!-- ================= 5. 로그인 및 비밀번호 찾기 페이지 ================= -->
+    <div class="page-view" id="login-page">
+        <div class="page-header">
+            <h2>로그인 / 비밀번호 찾기</h2>
+            <button class="btn-reset" onclick="showMainView()">메인으로</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 800px; margin: 0 auto;">
+            <div class="form-container-box" style="margin:0; width:100%;">
+                <h3>로그인</h3>
+                <input type="text" id="login-id" placeholder="아이디 입력 (기본: NAIRANJANA2)">
+                <input type="password" id="login-pw" placeholder="비밀번호 입력 (기본: NA0423)">
+                <button class="btn-action" style="width:100%; padding:14px;" onclick="handleLogin()">로그인하기</button>
+            </div>
+            <div class="form-container-box" style="margin:0; width:100%; background-color: var(--bg-color);">
+                <h3>비밀번호 찾기</h3>
+                <p style="font-size:12px; color:var(--sub-text); margin-bottom:12px;">가입 시 등록한 아이디와 비밀번호 찾기 답변을 입력해 새 비밀번호로 변경합니다.</p>
+                <input type="text" id="find-id" placeholder="가입한 아이디 입력">
+                <input type="text" id="find-answer" placeholder="비밀번호 찾기 답변 입력">
+                <input type="password" id="new-pw" placeholder="새로 사용할 비밀번호 입력">
+                <button class="btn-action" style="width:100%; padding:14px; background-color:var(--accent-orange);" onclick="handlePasswordReset()">비밀번호 재설정</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 6. 관리자 전용 대시보드 페이지 ================= -->
+    <div class="page-view" id="admin-dashboard">
+        <div class="page-header">
+            <h2>👑 사장님(관리자) 회원 & 주문 정보 관리</h2>
+            <button class="btn-reset" onclick="showMainView()">메인으로</button>
+        </div>
+        <p style="margin-bottom: 15px; font-weight: bold; color: var(--accent-orange);">* 가입한 고객들의 연락처 및 도로명 주소 정보입니다.</p>
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>연락처</th>
+                    <th>도로명 주소</th>
+                    <th>가입일</th>
+                </tr>
+            </thead>
+            <tbody id="admin-user-list"></tbody>
+        </table>
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>상호명: 이안모션랩 | 대표자: 이안석 | 사업자등록번호: 765-14-01710</p>
+        <p>소재지: 경기도 부천시 계남로 123 | 연락처: 010-0000-0000</p>
+        <p>© 이안모션랩. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 초기 데이터 (요청하신 사장님 계정 반영: NAIRANJANA2 / NA0423)
+        let users = JSON.parse(localStorage.getItem('ian_users')) || [
+            { id: 'NAIRANJANA2', pw: 'NA0423', name: '이안석(사장님)', phone: '010-0000-0000', address: '관리자 본사', hint: '보물', answer: '카메라', date: '2026-01-01' }
+        ];
+        let currentUser = JSON.parse(localStorage.getItem('ian_current_user')) || null;
+
+        // 공지사항 초기 글 싹 비움
+        let notices = JSON.parse(localStorage.getItem('ian_notices')) || [];
+
+        // 문의게시판 초기 예전 글('영상 견적 문의 드립니다') 싹 비움
+        let qnas = JSON.parse(localStorage.getItem('ian_qnas')) || [];
+
+        window.onload = function() {
+            updateAuthUI();
+            renderNotices();
+            renderQnas();
+        };
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
+        }
+
+        // 전체 화면 페이지 전환 함수
+        function openPage(pageId) {
+            document.getElementById('main-content-wrap').style.display = 'none';
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.getElementById('reset-container').style.display = 'none';
+
+            const target = document.getElementById(pageId);
+            if(target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // 회원가입 로직
+        function handleSignup() {
+            const id = document.getElementById('reg-id').value.trim();
+            const pw = document.getElementById('reg-pw').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const address = document.getElementById('reg-address').value.trim();
+            const hint = document.getElementById('reg-hint').value.trim();
+            const answer = document.getElementById('reg-answer').value.trim();
+
+            if(!id || !pw || !name || !phone || !address || !hint || !answer) {
+                alert('모든 항목 및 비밀번호 찾기 질문/답변을 빠짐없이 입력해주세요.');
+                return;
+            }
+
+            if(users.some(u => u.id === id)) {
+                alert('이미 존재하는 아이디입니다.');
+                return;
+            }
+
+            const newUser = { id, pw, name, phone, address, hint, answer, date: new Date().toISOString().slice(0, 10) };
+            users.push(newUser);
+            localStorage.setItem('ian_users', JSON.stringify(users));
+
+            alert('회원가입이 완료되었습니다! 로그인해 주세요.');
+            openPage('login-page');
+        }
+
+        // 로그인 로직
+        function handleLogin() {
+            const id = document.getElementById('login-id').value.trim();
+            const pw = document.getElementById('login-pw').value.trim();
+
+            const found = users.find(u => u.id === id && u.pw === pw);
+            if(!found) {
+                alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+                return;
+            }
+
+            currentUser = found;
+            localStorage.setItem('ian_current_user', JSON.stringify(currentUser));
+            alert(currentUser.name + '님 환영합니다!');
+            updateAuthUI();
+            showMainView();
+        }
+
+        // 비밀번호 찾기 및 재설정 로직
+        function handlePasswordReset() {
+            const id = document.getElementById('find-id').value.trim();
+            const answer = document.getElementById('find-answer').value.trim();
+            const newPw = document.getElementById('new-pw').value.trim();
+
+            if(!id || !answer || !newPw) {
+                alert('아이디, 답변, 새 비밀번호를 모두 입력해주세요.');
+                return;
+            }
+
+            const user = users.find(u => u.id === id);
+            if(!user) {
+                alert('존재하지 않는 아이디입니다.');
+                return;
+            }
+
+            if(user.answer !== answer) {
+                alert('비밀번호 찾기 답변이 일치하지 않습니다.');
+                return;
+            }
+
+            user.pw = newPw;
+            localStorage.setItem('ian_users', JSON.stringify(users));
+            alert('비밀번호가 성공적으로 재설정되었습니다! 새 비밀번호로 로그인하세요.');
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('ian_current_user');
+            alert('로그아웃 되었습니다.');
+            updateAuthUI();
+            showMainView();
+        }
+
+        function updateAuthUI() {
+            const statusText = document.getElementById('user-status-text');
+            const signupLink = document.getElementById('btn-signup-link');
+            const loginLink = document.getElementById('btn-login-link');
+            const logoutLink = document.getElementById('btn-logout-link');
+            const adminLink = document.getElementById('btn-admin-link');
+            const noticeWriteBtn = document.getElementById('btn-go-notice-write');
+
+            if(currentUser) {
+                statusText.innerText = currentUser.name + '님 환영합니다!';
+                signupLink.style.display = 'none';
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline-block';
+
+                // 사장님 계정(NAIRANJANA2) 여부 확인
+                if(currentUser.id === 'NAIRANJANA2') {
+                    adminLink.style.display = 'inline-block';
+                    if(noticeWriteBtn) noticeWriteBtn.style.display = 'inline-block';
+                } else {
+                    adminLink.style.display = 'none';
+                    if(noticeWriteBtn) noticeWriteBtn.style.display = 'none';
+                }
+            } else {
+                statusText.innerText = '방문객님 환영합니다!';
+                signupLink.style.display = 'inline-block';
+                loginLink.style.display = 'inline-block';
+                logoutLink.style.display = 'none';
+                adminLink.style.display = 'none';
+                if(noticeWriteBtn) noticeWriteBtn.style.display = 'none';
+            }
+        }
+
+        // 공지사항 작성 및 삭제
+        function addNoticePost() {
+            const title = document.getElementById('notice-title-input').value.trim();
+            const content = document.getElementById('notice-content-input').value.trim();
+            if(!title || !content) { alert('제목과 내용을 입력하세요.'); return; }
+
+            const newNotice = {
+                id: Date.now(),
+                title,
+                author: '이안모션랩(사장님)',
+                date: new Date().toISOString().slice(0, 10),
+                content
+            };
+            notices.unshift(newNotice);
+            localStorage.setItem('ian_notices', JSON.stringify(notices));
+
+            document.getElementById('notice-title-input').value = '';
+            document.getElementById('notice-content-input').value = '';
+            renderNotices();
+            openPage('notice-board');
+        }
+
+        function deleteNotice(id) {
+            if(!confirm('정말 이 공지사항을 삭제하시겠습니까?')) return;
+            notices = notices.filter(n => n.id !== id);
+            localStorage.setItem('ian_notices', JSON.stringify(notices));
+            renderNotices();
+        }
+
+        function renderNotices() {
+            const tbody = document.getElementById('notice-list');
+            tbody.innerHTML = '';
+            if(notices.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--sub-text);">등록된 공지사항이 없습니다.</td></tr>`;
+                return;
+            }
+            notices.forEach((n, idx) => {
+                const tr = document.createElement('tr');
+                let deleteBtnHtml = (currentUser && currentUser.id === 'NAIRANJANA2') ? `<button class="btn-reset" onclick="deleteNotice(${n.id})" style="color:red;">삭제</button>` : '-';
+                tr.innerHTML = `
+                    <td>${notices.length - idx}</td>
+                    <td><b>${n.title}</b><p style="font-size:12px; color:var(--sub-text); margin-top:4px;">${n.content}</p></td>
+                    <td>${n.author}</td>
+                    <td>${n.date}</td>
+                    <td>${deleteBtnHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 문의게시판 작성, 비밀번호 검증, 삭제
+        function addQnaPost() {
+            if(!currentUser) {
+                alert('문의글을 작성하려면 로그인이 필요합니다.');
+                openPage('login-page');
+                return;
+            }
+
+            const title = document.getElementById('qna-title-input').value.trim();
+            const content = document.getElementById('qna-content-input').value.trim();
+            const pw = document.getElementById('qna-pw-input').value.trim();
+            const isSecret = document.getElementById('qna-secret-check').checked;
+
+            if(!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+            if(isSecret && !pw) { alert('비밀글로 설정하려면 비밀번호를 입력해야 합니다.'); return; }
+
+            const newQna = {
+                id: Date.now(),
+                title,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                date: new Date().toISOString().slice(0, 10),
+                content,
+                pw: pw || '',
+                isSecret
+            };
+
+            qnas.unshift(newQna);
+            localStorage.setItem('ian_qnas', JSON.stringify(qnas));
+
+            document.getElementById('qna-title-input').value = '';
+            document.getElementById('qna-content-input').value = '';
+            document.getElementById('qna-pw-input').value = '';
+            document.getElementById('qna-secret-check').checked = false;
+            renderQnas();
+            openPage('qna-board');
+            alert('문의가 등록되었습니다.');
+        }
+
+        // 고객센터에서 1:1 직접 문의 접수
+        function submitDirectQna() {
+            if(!currentUser) {
+                alert('문의를 남기려면 로그인이 필요합니다.');
+                openPage('login-page');
+                return;
+            }
+
+            const title = document.getElementById('direct-qna-title').value.trim();
+            const content = document.getElementById('direct-qna-content').value.trim();
+            const pw = document.getElementById('direct-qna-pw').value.trim();
+            const isSecret = document.getElementById('direct-qna-secret').checked;
+
+            if(!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+            if(isSecret && !pw) { alert('비밀글 비밀번호를 입력해주세요.'); return; }
+
+            const newQna = {
+                id: Date.now(),
+                title,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                date: new Date().toISOString().slice(0, 10),
+                content,
+                pw: pw || '',
+                isSecret
+            };
+
+            qnas.unshift(newQna);
+            localStorage.setItem('ian_qnas', JSON.stringify(qnas));
+
+            document.getElementById('direct-qna-title').value = '';
+            document.getElementById('direct-qna-content').value = '';
+            document.getElementById('direct-qna-pw').value = '';
+            renderQnas();
+            alert('고객센터 1:1 문의가 정상적으로 접수되었습니다.');
+            openPage('qna-board');
+        }
+
+        function deleteQna(id) {
+            if(!confirm('해당 문의글을 삭제하시겠습니까?')) return;
+            qnas = qnas.filter(q => q.id !== id);
+            localStorage.setItem('ian_qnas', JSON.stringify(qnas));
+            renderQnas();
+        }
+
+        function viewQnaDetail(id) {
+            const q = qnas.find(item => item.id === id);
+            if(!q) return;
+
+            if(q.isSecret) {
+                const isAuthor = currentUser && currentUser.id === q.authorId;
+                const isAdmin = currentUser && currentUser.id === 'NAIRANJANA2';
+                if(!isAuthor && !isAdmin) {
+                    const inputPw = prompt('🔒 비밀글입니다. 설정된 비밀번호를 입력하세요:');
+                    if(inputPw !== q.pw) {
+                        alert('비밀번호가 틀렸습니다.');
+                        return;
+                    }
+                }
+            }
+
+            alert(`[문의 내용]\n제목: ${q.title}\n작성자: ${q.author}\n날짜: ${q.date}\n\n내용:\n${q.content}`);
+        }
+
+        function renderQnas() {
+            const tbody = document.getElementById('qna-list');
+            tbody.innerHTML = '';
+            if(qnas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--sub-text);">등록된 문의글이 없습니다.</td></tr>`;
+                return;
+            }
+            qnas.forEach((q, idx) => {
+                const tr = document.createElement('tr');
+                let lockIcon = q.isSecret ? '🔒 ' : '';
+                let deleteBtnHtml = (currentUser && (currentUser.id === 'NAIRANJANA2' || currentUser.id === q.authorId)) ? `<button class="btn-reset" onclick="deleteQna(${q.id})" style="color:red;">삭제</button>` : '-';
+                
+                tr.innerHTML = `
+                    <td>${qnas.length - idx}</td>
+                    <td><a href="javascript:viewQnaDetail(${q.id})" style="text-decoration:none; color:var(--text-color);"><b>${lockIcon}${q.title}</b></a></td>
+                    <td>${q.author}</td>
+                    <td>${q.date}</td>
+                    <td>${deleteBtnHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 관리자 대시보드
+        function openAdminDashboard() {
+            if(!currentUser || currentUser.id !== 'NAIRANJANA2') {
+                alert('접근 권한이 없습니다.');
+                return;
+            }
+
+            document.getElementById('main-content-wrap').style.display = 'none';
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.getElementById('reset-container').style.display = 'none';
+
+            const dashboard = document.getElementById('admin-dashboard');
+            dashboard.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const tbody = document.getElementById('admin-user-list');
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${u.id}</td>
+                    <td><b>${u.name}</b></td>
+                    <td>${u.phone}</td>
+                    <td style="color:var(--accent-blue); font-weight:bold;">${u.address}</td>
+                    <td>${u.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 메인 뷰 복원
+        function showMainView() {
+            document.getElementById('main-content-wrap').style.display = 'block';
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.getElementById('reset-container').style.display = 'block';
+
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('hidden'));
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('hidden'));
+            document.querySelectorAll('.detailed-content-view').forEach(det => det.classList.remove('active'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterSection(sectionId) {
+            showMainView();
+            document.querySelectorAll('.section').forEach(sec => {
+                if(sec.id === sectionId) sec.classList.remove('hidden');
+                else sec.classList.add('hidden');
+            });
+            document.getElementById('reset-container').style.display = 'block';
+            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function filterCard(sectionId, cardId) {
+            showMainView();
+            document.querySelectorAll('.section').forEach(sec => {
+                if(sec.id === sectionId) sec.classList.remove('hidden');
+                else sec.classList.add('hidden');
+            });
+            document.querySelectorAll('.card').forEach(c => {
+                if(c.id === cardId) c.classList.remove('hidden');
+                else if(c.closest('section').id === sectionId) c.classList.add('hidden');
+            });
+            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function showDetailContent(detailId) {
+            const currentSection = document.getElementById(detailId).closest('.section');
+            currentSection.querySelectorAll('.detailed-content-view').forEach(det => det.classList.remove('active'));
+            const target = document.getElementById(detailId);
+            if(target) {
+                target.classList.add('active');
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    </script>
+</body>
+</html>
